@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monte carlo doodle</title>
+</head>
+<body>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        position: relative;
+        width: 100%;
+    }
+
+    #canvas {
+        border: 1px solid red;
+        margin: 0 auto;
+    }
+</style>
+
+<canvas id="canvas" width="600" height="600"></canvas>
+<div> Total iterations: <span id="total"></span></div>
+<div> Count in Circle: <span id="countInCircle"></span></div>
+<div> Found: <span id="found"></span></div>
+<script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 300;
+
+    context.fillStyle = 'grey';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    context.fillStyle = 'green';
+    context.fill();
+
+    const putPoint = (x, y) => {
+        const circle = new Path2D();
+        circle.arc(x, y, 0.5, 0, 2 * Math.PI);
+        context.fillStyle = 'black';
+        context.fill(circle);
+    }
+
+    const iterations = 350_000;
+    let countInCircle = 0;
+    for (let i = 0; i < iterations; i++) {
+        const x = Math.floor(Math.random() * 600);
+        const y = Math.floor(Math.random() * 600);
+        putPoint(x, y);
+
+        if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= 600)
+        {
+            countInCircle++;
+        }
+    }
+
+    document.getElementById('total').innerText = String(iterations);
+    document.getElementById('countInCircle').innerText = String(countInCircle);
+    document.getElementById('found').innerText = String(4 * countInCircle / iterations);
+
+</script>
+</body>
+</html>
